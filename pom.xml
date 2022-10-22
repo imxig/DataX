@@ -79,6 +79,7 @@
         <module>loghubreader</module>
         <module>datahubreader</module>
         <module>starrocksreader</module>
+        <module>clickhousereader</module>
 
         <!-- writer -->
         <module>mysqlwriter</module>
