@@ -25,7 +25,7 @@ public class ClickHouseReader extends Reader {
         @Override
         public void init() {
             this.originalConfig = super.getPluginJobConf();
-            this.originalConfig.set(Constant.FETCH_SIZE, Integer.MIN_VALUE);
+            // this.originalConfig.set(Constant.FETCH_SIZE, Integer.MIN_VALUE);  // 注释fetchSize字段 by guoxi.li
 
             this.commonRdbmsReaderJob = new CommonRdbmsReader.Job(DATABASE_TYPE);
             this.commonRdbmsReaderJob.init(this.originalConfig);
