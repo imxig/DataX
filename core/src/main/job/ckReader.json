@@ -1,0 +1,39 @@
+{
+    "job": {
+        "setting": {
+            "speed": {
+                 "channel":1
+            }
+        },
+        "content": [
+            {
+                "reader": {
+                    "name": "clickhousereader",
+                    "parameter": {
+                        "username": "xxxxxx",
+                        "password": "xxxxxx",
+                        "connection": [
+                            {
+                                "querySql": [
+                                    "SELECT eventId, eventName, toDateTime(eventTime) as startTime FROM alarm_event"
+                                ],
+                                "jdbcUrl": [
+                                    "jdbc:clickhouse://xxx.xxx.xxx.xxx:8123/dbName"
+                                ]
+                            }
+                        ],
+						"fetchSize": 1000,
+						"queryTimeOut": 5000
+                    }
+                },
+                "writer": {
+                    "name": "streamwriter",
+                    "parameter": {
+                        "print": true,
+                        "encoding": "UTF-8"
+                    }
+                }
+            }
+        ]
+    }
+}
