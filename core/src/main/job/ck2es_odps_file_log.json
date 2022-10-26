@@ -1,0 +1,70 @@
+{
+    "job": {
+        "setting": {
+            "speed": {
+                 "channel":1
+            }
+        },
+        "content": [
+            {
+                "reader": {
+                    "name": "clickhousereader",
+                    "parameter": {
+                        "username": "default",
+                        "password": "jY%kng8cca#",
+                        "connection": [
+                            {
+                                "querySql": [
+                                    "traceId,startTime,endTime,instOwnerKp,instOwnerName,srcIp,terminalIp,userName,srcDepartment,srcDepartmentId,projectName,destDbName,destDepartmentId,destDepartment,partitionName,tableFileName,opType,dataSize,projectSystem,costTime,recordCount,srcDeviceType,srcDeviceVendor,srcDeviceName,createTime,ds FROM dsc.odps_file_log where createTime >= date_sub(day, 90, toDate(now()))"
+                                ],
+                                "jdbcUrl": [
+                                    "jdbc:clickhouse://10.50.2.212:8123/dsc"
+                                ]
+                            }
+                        ],
+						"fetchSize": 1000,
+						"queryTimeOut": 5000
+                    }
+                },
+                "writer": {
+                    "name":"elasticsearchwriter",
+                    "parameter":{
+                        "endpoint":"http://10.50.2.229:19200",
+                        "index":"ailpha-baas-log*",
+                        "type":"_doc",
+                        "dynamic": true,
+                        "batchSize":10000,
+                        "trySize":2,
+                        "splitter":",",
+                        "column":[{"name":"logSessionId","type":"keyword"},
+                            {"name":"startTime","type":"date","format":"yyyy-MM-dd HH:mm:ss||strict_date_optional_time||epoch_millis"},
+                            {"name":"endTime","type":"date","format":"yyyy-MM-dd HH:mm:ss||strict_date_optional_time||epoch_millis"},
+                            {"name":"srcUserId","type":"keyword"},
+                            {"name":"srcUserName","type":"keyword"},
+                            {"name":"srcAddress","type":"keyword"},
+                            {"name":"destAddress","type":"keyword"},
+                            {"name":"userName","type":"keyword"},
+                            {"name":"srcUnitName","type":"keyword"},
+                            {"name":"srcUnitId","type":"keyword"},
+                            {"name":"projectName","type":"keyword"},
+                            {"name":"destDbName","type":"integer"},
+                            {"name":"destUnitId","type":"keyword"},
+                            {"name":"destUnitName","type":"keyword"},
+                            {"name":"partitionName","type":"keyword"},
+                            {"name":"fileName","type":"keyword"},
+                            {"name":"opType","type":"keyword"},
+                            {"name":"dataSize","type":"keyword"},
+                            {"name":"projectSystem","type":"keyword"},
+                            {"name":"cost","type":"integer"},
+                            {"name":"effectRow","type":"long"},
+                            {"name":"deviceAssetType","type":"keyword"},
+                            {"name":"deviceVendor","type":"keyword"},
+                            {"name":"deviceName","type":"keyword"},
+                            {"name":"creationUtcTime","type":"keyword"},
+                            {"name":"utcTime","type":"keyword"}]
+                    }
+                }
+            }
+        ]
+    }
+}

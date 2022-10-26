@@ -1,0 +1,78 @@
+{
+    "job": {
+        "setting": {
+            "speed": {
+                 "channel":1
+            }
+        },
+        "content": [
+            {
+                "reader": {
+                    "name": "clickhousereader",
+                    "parameter": {
+                        "username": "default",
+                        "password": "jY%kng8cca#",
+                        "connection": [
+                            {
+                                "querySql": [
+                                    "traceId,startTime,endTime,instOwnerKp,instOwnerName,instOwnerDepartment,instOwnerDepartmentId,userName,srcIp,srcMac,destIp,destPort,projectName,dbType,destAssetName,destDepartmentId,destDepartment,projectSystem,payload,opType,execTime,execStatus,resultDesc,tableChName,tableEnName,jobType,jobStatus,costCpu,costMem,ds,srcDeviceType,srcDeviceVendor,srcDeviceName,createTime FROM dsc.odps_sql_log where createTime >= date_sub(day, 90, toDate(now()))"
+                                ],
+                                "jdbcUrl": [
+                                    "jdbc:clickhouse://10.50.2.212:8123/dsc"
+                                ]
+                            }
+                        ],
+						"fetchSize": 1000,
+						"queryTimeOut": 5000
+                    }
+                },
+                "writer": {
+                    "name":"elasticsearchwriter",
+                    "parameter":{
+                        "endpoint":"http://10.50.2.229:19200",
+                        "index":"ailpha-baas-log*",
+                        "type":"_doc",
+                        "dynamic": true,
+                        "batchSize":10000,
+                        "trySize":2,
+                        "splitter":",",
+                        "column":[{"name":"logSessionId","type":"keyword"},
+                            {"name":"startTime","type":"date","format":"yyyy-MM-dd HH:mm:ss||strict_date_optional_time||epoch_millis"},
+                            {"name":"endTime","type":"date","format":"yyyy-MM-dd HH:mm:ss||strict_date_optional_time||epoch_millis"},
+                            {"name":"srcUserId","type":"keyword"},
+                            {"name":"srcUserName","type":"keyword"},
+                            {"name":"srcUnitName","type":"keyword"},
+                            {"name":"srcUnitId","type":"keyword"},
+                            {"name":"userName","type":"keyword"},
+                            {"name":"srcAddress","type":"keyword"},
+                            {"name":"srcMacAddress","type":"keyword"},
+                            {"name":"destAddress","type":"keyword"},
+                            {"name":"destPort","type":"integer"},
+                            {"name":"projectName","type":"keyword"},
+                            {"name":"appProtocol","type":"keyword"},
+                            {"name":"destAssetName","type":"keyword"},
+                            {"name":"destUnitId","type":"keyword"},
+                            {"name":"destUnitName","type":"keyword"},
+                            {"name":"projectSystem","type":"keyword"},
+                            {"name":"payload","type":"keyword"},
+                            {"name":"opType","type":"keyword"},
+                            {"name":"cost","type":"integer"},
+                            {"name":"responseCode","type":"keyword"},
+                            {"name":"executeResult","type":"keyword"},
+                            {"name":"tableChName","type":"keyword"},
+                            {"name":"tableEnName","type":"keyword"},
+                            {"name":"logType","type":"keyword"},
+                            {"name":"status","type":"keyword"},
+                            {"name":"costCpu","type":"keyword"},
+                            {"name":"costMem","type":"keyword"},
+                            {"name":"utcTime","type":"keyword"},
+                            {"name":"deviceAssetType","type":"keyword"},
+                            {"name":"deviceVendor","type":"keyword"},
+                            {"name":"deviceName","type":"keyword"},
+                            {"name":"creationUtcTime","type":"keyword"}]
+                    }
+                }
+            }
+        ]
+    }
+}

@@ -1,0 +1,113 @@
+{
+    "job": {
+        "setting": {
+            "speed": {
+                 "channel":1
+            }
+        },
+        "content": [
+            {
+                "reader": {
+                    "name": "clickhousereader",
+                    "parameter": {
+                        "username": "default",
+                        "password": "jY%kng8cca#",
+                        "connection": [
+                            {
+                                "querySql": [
+                                    "SELECT traceId as eventIDs,eventId,toDateTime(eventTime) as startTime,eventType,eventName,eventDesc,riskLevel,status,srcIp,srcTransAddress,srcPort,destIp,destPort,transProtocol,appProtocol,ruleId,ruleName,srcGeoCountry,srcGeoRegion,srcGeoCity,srcGeoAddress,srcGeoLatitude,srcGeoLongitude,destGeoCountry,destGeoRegion,destGeoCity,destGeoAddress,destGeoLatitude,destGeoLongitude,srcSecurityZone,destSecurityZone,direction,destHostName,requestMethod,httpVersion,requestUri,requestUrl,httpReferer,accessAgent,responseCode,requestBody,srcUserName,destUserName,requestDomain,loginType,passwd,fileName,toInt64OrZero(fileSize) as fileSize,sessionId,costTime,result,srcMac,destMac,srcDeviceIp,srcDeviceCode,messageType,srcDeviceType,srcDeviceVendor,createTime,responseMsg,payload,resultDesc,alarmDepartment,srcDepartmentId,srcDepartment,destDepartmentId,destDepartment,dscDeviceType,dscDeviceVendor FROM dsc_risk_event dre where messageType = 'HTTP' AND createTime >= date_sub(day, 90, toDate(now()))"
+                                ],
+                                "jdbcUrl": [
+                                    "jdbc:clickhouse://10.50.2.212:8123/dsc"
+                                ]
+                            }
+                        ],
+						"fetchSize": 1000,
+						"queryTimeOut": 5000
+                    }
+                },
+                "writer": {
+                    "name":"elasticsearchwriter",
+                    "parameter":{
+                        "endpoint":"http://10.50.2.229:19200",
+                        "index":"ailpha-securityalarm-2022",
+                        "type":"_doc",
+                        "dynamic": true,
+                        "batchSize":10000,
+                        "trySize":2,
+                        "splitter":",",
+                        "column":[{"name":"eventIDs","type":"keyword"},
+                            {"name":"eventId","type":"keyword"},
+                            {"name":"startTime","type":"date","format":"yyyy-MM-dd HH:mm:ss||strict_date_optional_time||epoch_millis"},
+                            {"name":"subCategory","type":"keyword"},
+                            {"name":"alarmName","type":"keyword"},
+                            {"name":"alarmDescription","type":"keyword"},
+                            {"name":"severity","type":"keyword"},
+                            {"name":"alarmStatus","type":"keyword"},
+                            {"name":"srcAddress","type":"keyword"},
+                            {"name":"srcTransAddress","type":"keyword"},
+                            {"name":"srcPort","type":"integer"},
+                            {"name":"destAddress","type":"keyword"},
+                            {"name":"destPort","type":"integer"},
+                            {"name":"transProtocol","type":"keyword"},
+                            {"name":"appProtocol","type":"keyword"},
+                            {"name":"ruleId","type":"keyword"},
+                            {"name":"ruleName","type":"keyword"},
+                            {"name":"srcGeoCountry","type":"keyword"},
+                            {"name":"srcGeoRegion","type":"keyword"},
+                            {"name":"srcGeoCity","type":"keyword"},
+                            {"name":"srcGeoAddress","type":"keyword"},
+                            {"name":"srcGeoLatitude","type":"keyword"},
+                            {"name":"srcGeoLongitude","type":"keyword"},
+                            {"name":"destGeoCountry","type":"keyword"},
+                            {"name":"destGeoRegion","type":"keyword"},
+                            {"name":"destGeoCity","type":"keyword"},
+                            {"name":"destGeoAddress","type":"keyword"},
+                            {"name":"destGeoLatitude","type":"keyword"},
+                            {"name":"destGeoLongitude","type":"keyword"},
+                            {"name":"srcSecurityZone","type":"keyword"},
+                            {"name":"destSecurityZone","type":"keyword"},
+                            {"name":"direction","type":"keyword"},
+                            {"name":"destHostName","type":"keyword"},
+                            {"name":"requestMethod","type":"keyword"},
+                            {"name":"httpVersion","type":"keyword"},
+                            {"name":"requestUrl","type":"keyword"},
+                            {"name":"requestUrlQuery","type":"keyword"},
+                            {"name":"httpReferer","type":"keyword"},
+                            {"name":"accessAgent","type":"keyword"},
+                            {"name":"responseCode","type":"keyword"},
+                            {"name":"requestBody","type":"keyword"},
+                            {"name":"srcUserName","type":"keyword"},
+                            {"name":"destUserName","type":"keyword"},
+                            {"name":"requestDomain","type":"keyword"},
+                            {"name":"loginType","type":"keyword"},
+                            {"name":"passwd","type":"keyword"},
+                            {"name":"fileName","type":"keyword"},
+                            {"name":"fileSize","type":"long"},
+                            {"name":"logSessionId","type":"keyword"},
+                            {"name":"cost","type":"integer"},
+                            {"name":"responseCode","type":"keyword"},
+                            {"name":"srcMacAddress","type":"keyword"},
+                            {"name":"destMacAddress","type":"keyword"},
+                            {"name":"deviceAddress","type":"keyword"},
+                            {"name":"deviceId","type":"keyword"},
+                            {"name":"protocolType","type":"keyword"},
+                            {"name":"deviceSendProductName","type":"keyword"},
+                            {"name":"productVendorName","type":"keyword"},
+                            {"name":"creationUtcTime","type":"keyword"},
+                            {"name":"responseMsg","type":"keyword"},
+                            {"name":"payload","type":"keyword"},
+                            {"name":"alarmResults","type":"keyword"},
+                            {"name":"destUnitName","type":"keyword"},
+                            {"name":"srcUnitId","type":"keyword"},
+                            {"name":"srcUnitName","type":"keyword"},
+                            {"name":"destUnitId","type":"keyword"},
+                            {"name":"destUnitName","type":"keyword"},
+                            {"name":"deviceAssetSubType","type":"keyword"},
+                            {"name":"deviceVendor","type":"keyword"}]
+                    }
+                }
+            }
+        ]
+    }
+}

@@ -1,0 +1,56 @@
+{
+    "job": {
+        "setting": {
+            "speed": {
+                 "channel":1
+            }
+        },
+        "content": [
+            {
+                "reader": {
+                    "name": "clickhousereader",
+                    "parameter": {
+                        "username": "default",
+                        "password": "jY%kng8cca#",
+                        "connection": [
+                            {
+                                "querySql": [
+                                    "SELECT strategyId,statisticTime,period,srcUserName,destIp,destPort,requestUrl,sensitiveLevel,sensitiveType,visitCount,source,createTime FROM dsc.api_user_visit_statistic where createTime >= date_sub(day, 90, toDate(now()))"
+                                ],
+                                "jdbcUrl": [
+                                    "jdbc:clickhouse://10.50.2.212:8123/dsc"
+                                ]
+                            }
+                        ],
+						"fetchSize": 1000,
+						"queryTimeOut": 5000
+                    }
+                },
+                "writer": {
+                    "name":"elasticsearchwriter",
+                    "parameter":{
+                        "endpoint":"http://10.50.2.229:19200",
+                        "index":"ailpha-ds-api_user_visit_statistic",
+                        "type":"_doc",
+                        "dynamic": true,
+                        "batchSize":10000,
+                        "trySize":2,
+                        "splitter":",",
+                        "column":[{"name":"strategyId","type":"keyword"},
+                            {"name":"statisticTime","type":"long"},
+                            {"name":"period","type":"integer"},
+                            {"name":"srcUserName","type":"keyword"},
+                            {"name":"destIp","type":"keyword"},
+                            {"name":"destPort","type":"integer"},
+                            {"name":"requestUrl","type":"keyword"},
+                            {"name":"sensitiveLevel","type":"keyword"},
+                            {"name":"sensitiveType","type":"keyword"},
+                            {"name":"visitCount","type":"integer"},
+                            {"name":"dsSource","type":"keyword"},
+                            {"name":"createTime","type":"date","format":"yyyy-MM-dd HH:mm:ss||strict_date_optional_time||epoch_millis"}]
+                    }
+                }
+            }
+        ]
+    }
+}

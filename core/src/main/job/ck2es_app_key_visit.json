@@ -10,15 +10,15 @@
                 "reader": {
                     "name": "clickhousereader",
                     "parameter": {
-                        "username": "xxxxxx",
-                        "password": "xxxxxx",
+                        "username": "default",
+                        "password": "jY%kng8cca#",
                         "connection": [
                             {
                                 "querySql": [
-                                    "SELECT eventId, eventName, toDateTime(eventTime) as startTime FROM alarm_event"
+                                    "SELECT strategyId,statisticTime,period,appKey,visitCount,source,createTime FROM dsc.app_key_visit_statistic where createTime >= date_sub(day, 90, toDate(now()))"
                                 ],
                                 "jdbcUrl": [
-                                    "jdbc:clickhouse://xxx.xxx.xxx.xxx:8123/dbName"
+                                    "jdbc:clickhouse://10.50.2.212:8123/dsc"
                                 ]
                             }
                         ],
@@ -30,15 +30,19 @@
                     "name":"elasticsearchwriter",
                     "parameter":{
                         "endpoint":"http://10.50.2.229:19200",
-                        "index":"ailpha-baas-alarm-2022-000001",
+                        "index":"ailpha-ds-app_key_visit_statistic",
                         "type":"_doc",
                         "dynamic": true,
                         "batchSize":10000,
                         "trySize":2,
                         "splitter":",",
-                        "column":[{"name":"eventId","type":"keyword"},
-                            {"name":"alarmName","type":"keyword"},
-                            {"name":"startTime","type":"date","format":"yyyy-MM-dd HH:mm:ss||strict_date_optional_time||epoch_millis"}]
+                        "column":[{"name":"strategyId","type":"keyword"},
+                            {"name":"statisticTime","type":"long"},
+                            {"name":"period","type":"integer"},
+                            {"name":"appKey","type":"keyword"},
+                            {"name":"visitCount","type":"integer"},
+                            {"name":"dsSource","type":"keyword"},
+                            {"name":"createTime","type":"date","format":"yyyy-MM-dd HH:mm:ss||strict_date_optional_time||epoch_millis"}]
                     }
                 }
             }

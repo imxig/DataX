@@ -1,0 +1,91 @@
+{
+    "job": {
+        "setting": {
+            "speed": {
+                 "channel":1
+            }
+        },
+        "content": [
+            {
+                "reader": {
+                    "name": "clickhousereader",
+                    "parameter": {
+                        "username": "default",
+                        "password": "jY%kng8cca#",
+                        "connection": [
+                            {
+                                "querySql": [
+                                    "select traceId,eventId,toDateTime(eventTime) as startTime,eventType,eventName,eventDesc,riskLevel,status,srcIp,srcPort,srcHostName,destIp,destPort,transProtocol,appProtocol,ruleId,ruleName,srcUserName,dbType,dbName,tableName,sessionId,sqlId,opType,effectRow,costTime,result,dataSet,srcMac,destMac,dbUser,clientPrg,srcDeviceIp,srcDeviceCode,messageType,srcDeviceType,srcDeviceVendor,createTime,payload,resultDesc,alarmDepartment,srcDepartmentId,srcDepartment,destDepartmentId,destDepartment,dscDeviceType,dscDeviceVendor FROM dsc.dsc_risk_event where messageType = 'DB' AND createTime >= date_sub(day, 90, toDate(now()))"
+                                ],
+                                "jdbcUrl": [
+                                    "jdbc:clickhouse://10.50.2.212:8123/dsc"
+                                ]
+                            }
+                        ],
+						"fetchSize": 1000,
+						"queryTimeOut": 5000
+                    }
+                },
+                "writer": {
+                    "name":"elasticsearchwriter",
+                    "parameter":{
+                        "endpoint":"http://10.50.2.229:19200",
+                        "index":"ailpha-securityalarm-2022",
+                        "type":"_doc",
+                        "dynamic": true,
+                        "batchSize":10000,
+                        "trySize":2,
+                        "splitter":",",
+                        "column":[{"name":"eventIDs","type":"keyword"},
+                            {"name":"eventId","type":"keyword"},
+                            {"name":"startTime","type":"date","format":"yyyy-MM-dd HH:mm:ss||strict_date_optional_time||epoch_millis"},
+                            {"name":"subCategory","type":"keyword"},
+                            {"name":"alarmName","type":"keyword"},
+                            {"name":"alarmDescription","type":"keyword"},
+                            {"name":"severity","type":"keyword"},
+                            {"name":"alarmStatus","type":"keyword"},
+                            {"name":"srcAddress","type":"keyword"},
+                            {"name":"srcPort","type":"integer"},
+                            {"name":"srcHostName","type":"keyword"},
+                            {"name":"destAddress","type":"keyword"},
+                            {"name":"destPort","type":"integer"},
+                            {"name":"transProtocol","type":"keyword"},
+                            {"name":"appProtocol","type":"keyword"},
+                            {"name":"ruleId","type":"keyword"},
+                            {"name":"ruleName","type":"keyword"},
+                            {"name":"srcUserName","type":"keyword"},
+                            {"name":"dataType","type":"keyword"},
+                            {"name":"databaseName","type":"keyword"},
+                            {"name":"dbTableName","type":"keyword"},
+                            {"name":"logSessionId","type":"keyword"},
+                            {"name":"sql","type":"keyword"},
+                            {"name":"opType","type":"keyword"},
+                            {"name":"effectRow","type":"long"},
+                            {"name":"cost","type":"integer"},
+                            {"name":"responseCode","type":"keyword"},
+                            {"name":"executeResult","type":"keyword"},
+                            {"name":"srcMacAddress","type":"keyword"},
+                            {"name":"destMacAddress","type":"keyword"},
+                            {"name":"loginUser","type":"keyword"},
+                            {"name":"clientPrg","type":"keyword"},
+                            {"name":"deviceAddress","type":"keyword"},
+                            {"name":"deviceId","type":"keyword"},
+                            {"name":"protocolType","type":"keyword"},
+                            {"name":"deviceSendProductName","type":"keyword"},
+                            {"name":"productVendorName","type":"keyword"},
+                            {"name":"creationUtcTime","type":"keyword"},
+                            {"name":"payload","type":"keyword"},
+                            {"name":"alarmResults","type":"keyword"},
+                            {"name":"destUnitName","type":"keyword"},
+                            {"name":"srcUnitId","type":"keyword"},
+                            {"name":"srcUnitName","type":"keyword"},
+                            {"name":"destUnitId","type":"keyword"},
+                            {"name":"destUnitName","type":"keyword"},
+                            {"name":"deviceAssetSubType","type":"keyword"},
+                            {"name":"deviceVendor","type":"keyword"}]
+                    }
+                }
+            }
+        ]
+    }
+}
