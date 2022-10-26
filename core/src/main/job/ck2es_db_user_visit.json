@@ -11,14 +11,14 @@
                     "name": "clickhousereader",
                     "parameter": {
                         "username": "default",
-                        "password": "jY%kng8cca#",
+                        "password": "xxxxxx",
                         "connection": [
                             {
                                 "querySql": [
                                     "SELECT strategyId,statisticTime,period,srcUserName,destIp,destPort,dbName,tableName,fieldName,sensitiveLevel,sensitiveType,visitCount,source,createTime FROM dsc.db_user_visit_statistic where createTime >= date_sub(day, 90, toDate(now()))"
                                 ],
                                 "jdbcUrl": [
-                                    "jdbc:clickhouse://10.50.2.212:8123/dsc"
+                                    "jdbc:clickhouse://xxx.xxx.xxx.xxx:8123/dsc"
                                 ]
                             }
                         ],
@@ -29,8 +29,8 @@
                 "writer": {
                     "name":"elasticsearchwriter",
                     "parameter":{
-                        "endpoint":"http://10.50.2.229:19200",
-                        "index":"ailpha-ds-db_user_statistic",
+                        "endpoint":"http://xxx.xxx.xxx.xxx:19200",
+                        "index":"xxx-ds-db_user_statistic",
                         "type":"_doc",
                         "dynamic": true,
                         "batchSize":10000,
@@ -40,11 +40,13 @@
                             {"name":"statisticTime","type":"long"},
                             {"name":"period","type":"integer"},
                             {"name":"srcUserName","type":"keyword"},
-                            {"name":"srcIp","type":"keyword"},
                             {"name":"destIp","type":"keyword"},
                             {"name":"destPort","type":"integer"},
-                            {"name":"resultCode","type":"keyword"},
-                            {"name":"latestVisitTime","type":"keyword"},
+                            {"name":"dbName","type":"keyword"},
+                            {"name":"tableName","type":"keyword"},
+                            {"name":"fieldName","type":"keyword"},
+                            {"name":"sensitiveLevel","type":"keyword"},
+                            {"name":"sensitiveType","type":"keyword"},
                             {"name":"visitCount","type":"integer"},
                             {"name":"dsSource","type":"keyword"},
                             {"name":"createTime","type":"date","format":"yyyy-MM-dd HH:mm:ss||strict_date_optional_time||epoch_millis"}]

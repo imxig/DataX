@@ -11,7 +11,7 @@
                     "name": "clickhousereader",
                     "parameter": {
                         "username": "default",
-                        "password": "jY%kng8cca#",
+                        "password": "xxxxxx",
                         "connection": [
                             {
                                 "querySql": [
@@ -29,8 +29,8 @@
                 "writer": {
                     "name":"elasticsearchwriter",
                     "parameter":{
-                        "endpoint":"http://10.50.2.229:19200",
-                        "index":"ailpha-ds-api-ip-statistic",
+                        "endpoint":"http://xxx.xxx.xxx.xxx:19200",
+                        "index":"xxx-ds-api-ip-statistic",
                         "type":"_doc",
                         "dynamic": true,
                         "batchSize":10000,
