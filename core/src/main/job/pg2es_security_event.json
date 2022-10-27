@@ -1,0 +1,65 @@
+{
+	"job": {
+        "content": [
+            {
+                "reader": {
+                    "name": "postgresqlreader",
+                    "parameter": {                                        
+                        "connection": [
+                            {
+                                "jdbcUrl": [
+                                    "jdbc:postgresql://xxx.xxx.xxx.xxx:5432/dsc?currentSchema=dsc&allowMultiQueries=true&stringtype=unspecified"
+                                ],
+                                "querySql": [
+                                    "select event_id, detail, suggestion, created_time from security_event where event_id = 'ed2069a756eb4df391d2269a340af9a3'"
+                                ]
+                            }
+                        ],
+                        "password": "xxx",
+                        "splitPk": "",
+                        "username": "dsc"
+                    }
+                },
+                "writer": {
+                  "name":"elasticsearchwriter",
+                  "parameter":{
+                    "endpoint":"http://xxx.xxx.xxx.xxx:19200",
+                    "index":"xxx-ds-alarm-test",
+                    "type":"_doc",
+                    "dynamic": true,
+                    "batchSize":10000,
+                    "trySize":2,
+                    "splitter":",",
+                    "column":[{"name":"eventId","type":"keyword"},
+                      {"name":"detail","type":"keyword"},
+                      {"name":"suggestion","type":"keyword"},
+                      {"name":"createTime","type":"date","format":"yyyy-MM-dd HH:mm:ss||strict_date_optional_time||epoch_millis"}]
+                  }
+                },
+                "transformer": [
+                  {
+                    "name": "dx_decrypt",
+                    "parameter":
+                    {
+                      "columnIndex":1,
+                      "paras":[]
+                    }
+                  },
+                  {
+                    "name": "dx_decrypt",
+                    "parameter":
+                    {
+                      "columnIndex":2,
+                      "paras":[]
+                    }
+                  }
+              ]
+            }
+        ],
+        "setting": {
+            "speed": {
+                "channel": 1
+            }
+        }
+    }
+}

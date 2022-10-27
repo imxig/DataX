@@ -2,6 +2,7 @@ package com.alibaba.datax.core.transport.transformer;
 
 import com.alibaba.datax.common.exception.DataXException;
 import com.alibaba.datax.common.util.Configuration;
+import com.alibaba.datax.core.transport.transformer.self.DecryptTransformer;
 import com.alibaba.datax.core.util.container.CoreConstant;
 import com.alibaba.datax.core.util.container.JarLoader;
 import com.alibaba.datax.transformer.ComplexTransformer;
@@ -37,6 +38,8 @@ public class TransformerRegistry {
         registTransformer(new FilterTransformer());
         registTransformer(new GroovyTransformer());
         registTransformer(new DigestTransformer());
+        // 自定义添加的 transformer
+        registTransformer(new DecryptTransformer());
     }
 
     public static void loadTransformerFromLocalStorage() {
