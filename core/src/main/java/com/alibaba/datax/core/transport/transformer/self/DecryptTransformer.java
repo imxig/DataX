@@ -8,7 +8,6 @@ import com.alibaba.datax.core.transport.transformer.TransformerErrorCode;
 import com.alibaba.datax.core.util.AESUtil;
 import com.alibaba.datax.core.util.SecretUtil;
 import com.alibaba.datax.transformer.Transformer;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
